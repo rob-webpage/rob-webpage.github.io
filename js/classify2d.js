@@ -36,7 +36,7 @@ var quad_value_priv = fillArray(0.0, num_locs_quadrature*num_locs_quadrature);
 var quad_samp_priv = fillArray(0.0, num_locs_quadrature*num_locs_quadrature);
 z_ranges = fillArray(0.0, 4);
 
-var convex_background = 0.015;
+var convex_background = 0.02;
 var convex_accept= 0.01;
 
 var num_samples_taken = 0;
@@ -44,11 +44,9 @@ var num_recent_samples = 5;
 var posterior_samples = fillArray(fillArray([0.0, 0.0], num_recent_samples), 4);
 acceptance_rates = fillArray(1.0, 4);
 
-var sigma_likelihood = 0.1;
-var sigma_prior = 0.5;
+var sigma_likelihood = 0.707;  // math.sqrt(0.5) to simplify math;
+var sigma_prior = 0.8;
 targetEpsilon = 1.0;
-var learning_rate_start = 0.0004;
-learning_rate = 0.0;
 
 function myinit() {}
 
@@ -403,8 +401,16 @@ function drawAxisValues(context, value, printw = false) {
 }
 
 function draw() {
-  // Clear canvas
-  contextsClients.forEach((context, pane_index) => {
+  // Clear and plot axis values for scatters
+  contextsScatters.forEach((context) => {
+    // Draw axis values
+    context.clearRect(0, 0, WIDTH, HEIGHT);
+    context.fillStyle = "rgb(255, 255, 224)"; // Light yellow background
+    context.fillRect(0, 0, context.canvas.width, context.canvas.height);
+    drawAxisValues(context, extent_plot, false);
+  });
+
+  contextsDecisions.forEach((context, pane_index) => {
     context.clearRect(0, 0, WIDTH, HEIGHT);
     // Draw the background color to indicate mean decision
     for (var numg = 0; numg < num_grid*num_grid; numg++) {
@@ -424,15 +430,12 @@ function draw() {
         density, // + 2
       );
     }
-  });
-
-  contextsClients.forEach((context, fed_index) => {
-    // Draw axis values
     drawAxisValues(context, extent_plot, false);
   });
 
-  // draw datapoints.
-  contextsClients.forEach((context, fed_index) => {
+
+  // draw scatter datapoints.
+  contextsScatters.forEach((context) => {
     context.strokeStyle = "rgb(0,0,0)";
     context.lineWidth = 1;
     for (var i = 0; i < num_points_all; i++) {
@@ -455,8 +458,6 @@ function draw() {
 function drawSingleSample(context, pane_index) {
   var w0, w1, w2;
   var int_accept = 0;
-
-  learning_rate = 1000 * learning_rate_start / (1000 + num_updates);
 
   gibbs_index = (gibbs_index + 1) % 3;
 
@@ -608,8 +609,8 @@ function drawSingleSample(context, pane_index) {
 }
 
 function drawRegressionLines() {
-  contextsClients.forEach((ctx, fed_index) => {
-    drawSingleSample(ctx, fed_index);
+  contextsScatters.forEach((ctx, pane_index) => {
+    drawSingleSample(ctx, pane_index);
   });
 }
 
@@ -712,7 +713,6 @@ function calcQuadratureOnce() {
 function resetRunningMean() {
   num_updates = 0;
 
-  // TODO: reset Langevin Dynamics learning rate
   quad_value = fillArray(0.0, num_locs_quadrature*num_locs_quadrature);
   quad_value_priv = fillArray(0.0, num_locs_quadrature*num_locs_quadrature);
 

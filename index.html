@@ -30,7 +30,7 @@
         border: 1px solid #555;
       }
       #wrap {
-        width: 1700px;
+        width: 1800px;
         margin-right: auto;
         margin-left: auto;
         margin-bottom: 200px;
@@ -39,6 +39,7 @@
         width: 420px;
         display: inline-block;
         vertical-align: top;
+        text-align: center;
       }
       .paneTitle {
         font-size: 30;
@@ -56,12 +57,73 @@
         display: inline-block;
         vertical-align: top;
       }
+
+      .paneVerticalLine {
+        width: 20px;
+        display: inline-block;
+        vertical-align: top;
+        text-align: center;
+      }
+
+      .decisionAnnouncement {
+        font-size: 14;
+        height: 10px;
+        /* position: absolute;
+        bottom: 0; */
+      }
     </style>
   </head>
 
   <body>
     <div id="wrap">
       <h1>Linear Regression under Differential Privacy</h1>
+
+      <div style="font-size: 12px;">
+        This javascript applet shows linear regression under differential privacy.
+        <br />
+        <br />
+
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <p>
+          The decision boundary is parameterized by \( w_0, w_1, w_2 \):
+          <br />
+          \( w_0 \cdot x_1 + w_1 \cdot x_2 + w_2 = 0 \)
+          <br />
+          <br />
+          It is assumed that \( w \in \mathbb{R}^3 \) and that the vector \( x_i \) is augmented with a 1: \( x_i = [x_{i,1}, x_{i,2}, 1] \).
+          <br />
+          <br />
+          <b>For sampling non-privately, we use the distribution:</b>
+          <br />
+          Prior: \( p(w_0, w_1, w_2) \propto \exp(-\frac{1}{2} w^T w) \)
+          <br />
+          Likelihood: \( p(D | w) = \prod_{i=1}^N \mathcal{N}(y_i | w^T x_i, \text{variance = } 0.5) \propto \exp(- \sum_{i=1}^N (y_i - w^T x_i)^2) \)
+          <br />
+          Posterior: \( p(w | D) \propto p(D | w) p(w) \)
+          <br />
+          <br />
+          <b>For sampling privately, we use the bounded distribution:</b>
+          <br />
+          Likelihood: \( p(D | w) \propto \exp(- \sum_{i=1}^N \frac{\varepsilon}{2} \sigma\big( (y_i - w^T x_i)^2 \big) ) \)
+          <br />
+          With abuse of notation \( \sigma\big( \big) \) is the sigmoid function, i.e., a clipping function.
+          <br />
+          <br />
+          <b>DP guarantee:</b>
+          <br />
+          Scaling each sigmoid with \( \frac{\varepsilon}{2} \) implies that removing any data sample changes the log-likelihood by at most \( \frac{\varepsilon}{2} \) and therefore the posterior by at most \( \varepsilon  \).
+          <br />
+          A formal proof is provided in "Privacy for free: Posterior sampling and stochastic gradient monte carlo." International Conference on Machine Learning 2015, Wang, Fienberg and Smola.
+
+        </p>
+        <br />
+        <br />
+        Please contact romijndersrob@gmail.com for questions or comments.
+
+
+
+      </div>
 
       <div class="panes">
         <p class="explainer">
@@ -128,7 +190,7 @@
         </div>
 
         <div class="pane">
-          <p class="paneTitle">Non-private sampling (Gibbs)</p>
+          <p class="paneTitle">Non-private (Gibbs)</p>
           <p id="accept1">Acceptance rate: </p>
           <br />
           <input
@@ -163,9 +225,17 @@
             >Browser not supported for Canvas. Get a real browser.</canvas
           >
         </div>
+        <div class="paneVerticalLine"></div>
+        <canvas id="separator1" width="2" height="600" style="display: inline-block;"></canvas>
+        <script>
+          var canvas = document.getElementById('separator1');
+          var context = canvas.getContext('2d');
+          context.fillStyle = 'black';
+          context.fillRect(0, 0, 2, canvas.height);
+        </script>
 
         <div class="pane">
-          <p class="paneTitle">Private sampling (Gibbs)</p>
+          <p class="paneTitle">Private (Gibbs)</p>
           <p id="accept2">Acceptance rate: </p>
           <br />
           <input
@@ -202,7 +272,7 @@
         </div>
 
         <div class="pane">
-          <p class="paneTitle">Private sampling (quadrature)</p>
+          <p class="paneTitle">Private (quadrature)</p>
           Conditioning w2=0
           <p id="accept3">Acceptance rate: </p>
           <br />
@@ -241,6 +311,41 @@
         <br />
         <br />
         <div class="pane">
+          <p class="decisionAnnouncement">Decisions averaged over 50 samples drawn: </p>
+          <canvas id="NPGCanvasDecision0" width="400" height="400"
+            >Browser not supported for Canvas. Get a real browser.</canvas
+          ><br />
+        </div>
+        <div class="pane">
+          <p class="decisionAnnouncement">Decisions averaged over 50 samples drawn: </p>
+          <canvas id="NPGCanvasDecision1" width="400" height="400"
+            >Browser not supported for Canvas. Get a real browser.</canvas
+          ><br />
+        </div>
+        <div class="paneVerticalLine"></div>
+        <canvas id="separator2" width="2" height="400" style="display: inline-block;"></canvas>
+        <script>
+          var canvas = document.getElementById('separator2');
+          var context = canvas.getContext('2d');
+
+          context.fillStyle = 'black';
+          context.fillRect(0, 0, 5, canvas.height);
+        </script>
+        <div class="pane">
+          <p class="decisionAnnouncement">Decisions averaged over 50 samples drawn: </p>
+          <canvas id="NPGCanvasDecision2" width="400" height="400"
+            >Browser not supported for Canvas. Get a real browser.</canvas
+          ><br />
+        </div>
+        <div class="pane">
+          <p class="decisionAnnouncement">Decisions averaged over 50 samples drawn: </p>
+          <canvas id="NPGCanvasDecision3" width="400" height="400"
+            >Browser not supported for Canvas. Get a real browser.</canvas
+          ><br />
+        </div>
+        <br />
+        <br />
+        <div class="pane">
           <p id="zrange0">Zrange: </p>
           <canvas id="NPGCanvasClientPosterior0" width="400" height="400"
             >Browser not supported for Canvas. Get a real browser.</canvas
@@ -252,6 +357,15 @@
             >Browser not supported for Canvas. Get a real browser.</canvas
           ><br />
         </div>
+        <div class="paneVerticalLine"></div>
+        <canvas id="separator3" width="2" height="450" style="display: inline-block;"></canvas>
+        <script>
+          var canvas = document.getElementById('separator3');
+          var context = canvas.getContext('2d');
+
+          context.fillStyle = 'black';
+          context.fillRect(0, 0, 5, canvas.height);
+        </script>
         <div class="pane">
           <p id="zrange2">Zrange: </p>
           <canvas id="NPGCanvasClientPosterior2" width="400" height="400"

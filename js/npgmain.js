@@ -166,6 +166,16 @@ function NPGinit(FPS) {
     false
   );
 
+  // Canvases for Decisions
+  canvasDecision0 = document.getElementById("NPGCanvasDecision0");
+  ctxDecision0 = canvasDecision0.getContext("2d");
+  canvasDecision1 = document.getElementById("NPGCanvasDecision1");
+  ctxDecision1 = canvasDecision1.getContext("2d");
+  canvasDecision2 = document.getElementById("NPGCanvasDecision2");
+  ctxDecision2 = canvasDecision2.getContext("2d");
+  canvasDecision3 = document.getElementById("NPGCanvasDecision3");
+  ctxDecision3 = canvasDecision3.getContext("2d");
+
   // Canvases for posterior
   canvasPosterior0 = document.getElementById("NPGCanvasClientPosterior0");
   ctxPosterior0 = canvasPosterior0.getContext("2d");
@@ -184,7 +194,8 @@ function NPGinit(FPS) {
   acceptDisp2 = document.getElementById("accept2");
   acceptDisp3 = document.getElementById("accept3");
 
-  contextsClients = [ctx0, ctx1, ctx2, ctx3];
+  contextsScatters = [ctx0, ctx1, ctx2, ctx3];
+  contextsDecisions = [ctxDecision0, ctxDecision1, ctxDecision2, ctxDecision3];
   contextsPosteriors = [ctxPosterior0, ctxPosterior1, ctxPosterior2, ctxPosterior3];
 
   //canvas element cannot get focus by default. Requires to either set
@@ -201,7 +212,7 @@ function NPGinit(FPS) {
 }
 
 function updateStepCounter() {
-  stepCounter.innerHTML = "Step: " + num_updates + "\n Learning rate: " + (10000*learning_rate).toFixed(2) + "*10^-5";
+  stepCounter.innerHTML = "Step: " + num_updates;
 
   acceptDisp0.innerHTML = "Acceptance: " + (100*acceptance_rates[0]).toFixed(1) + " %";
   acceptDisp1.innerHTML = "Acceptance: " + (100*acceptance_rates[1]).toFixed(1) + " %";
