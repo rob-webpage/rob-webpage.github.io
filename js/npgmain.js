@@ -224,7 +224,7 @@ function updateStepCounter() {
   document.getElementById("zrange2").innerHTML = "log-prob: min: "+z_ranges[2].toFixed(1)+", max: "+z_ranges[3].toFixed(1) + ",   range: "+(z_ranges[3]-z_ranges[2]).toFixed(1) + " bits";
   document.getElementById("zrange3").innerHTML = "log-prob: min: "+z_ranges[2].toFixed(1)+", max: "+z_ranges[3].toFixed(1) + ",   range: "+(z_ranges[3]-z_ranges[2]).toFixed(1) + " bits";
 
-  epsilonDisplay.innerHTML = "Epsilon: " + targetEpsilon.toFixed(2);
+  epsilonDisplay.innerHTML = "Current epsilon: " + targetEpsilon.toFixed(2);
 }
 
 function NPGtick() {

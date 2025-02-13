@@ -452,6 +452,10 @@ function draw() {
         fillstyle
       );
     }
+
+    context.font = "14px sans-serif";
+    context.fillStyle = "rgb(0, 0, 0)";
+    context.fillText("input data", 3, 20);
   });
 }
 
@@ -643,6 +647,8 @@ function drawPosteriorSamples() {
 
     // Draw axis values
     drawAxisValues(context, extent_plot_posterior, true);
+    context.font = "14px sans-serif";
+    context.fillText("Unnormalized log-posterior", 3, 20);
 
     if (pane_index <= 3) {
 

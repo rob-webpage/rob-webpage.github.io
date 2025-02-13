@@ -115,9 +115,17 @@
           Scaling each sigmoid with \( \frac{\varepsilon}{2} \) implies that removing any data sample changes the log-likelihood by at most \( \frac{\varepsilon}{2} \) and therefore the posterior by at most \( \varepsilon  \).
           <br />
           A formal proof is provided in "Privacy for free: Posterior sampling and stochastic gradient monte carlo." International Conference on Machine Learning 2015, Wang, Fienberg and Smola.
-
+          <br />
+          <br />
+          <b>Observations:</b>
+          <br />
+          Every blue line is a new sample from the posterior. In reality, every sample is a loss of privacy.
+          <br />
+          The log-posterior under DP is more diffuse than the non-private posterior.
+          <br />
+          The decision boundary is more uncertain under DP.
+          <br />
         </p>
-        <br />
         <br />
         Please contact romijndersrob@gmail.com for questions or comments.
 
@@ -135,11 +143,9 @@
           <b>CTRL+CLICK</b>: Remove closest data point<br />
           <b>COMMAND+CLICK</b>: Remove closest data point<br />
           <div class="pane"></div>
-            <p class="paneTitle">Step Number</p>
             <p id="stepCounter">Step: 0</p>
           </div>
           <div class="pane">
-            <p class="paneTitle">Set Epsilon</p>
             <p id="epsilonDisplay">eps = 0.0</p>
             <input type="number" id="epsilonInput" placeholder="Enter epsilon value" />
             <input
@@ -384,15 +390,11 @@
         Decision boundary: w0*x + w1*y + w2 = 0
         <br />
         <br />
-        Todo:
-        <ul>
-          <li>Make a function to obtain the loglik and score from data and param</li>
-          <li>Color sampling background according to loglik</li>
       </p>
 
       <div class="pane">
-        <p class="paneTitle">Math Image</p>
-        <img src="math.jpg" alt="Math Image" style="width: 1200px; border: 1px solid #555;" />
+        <p class="paneTitle">Model description from Overleaf (screenshot)</p>
+        <img src="math.JPG" alt="Math Image" style="width: 1200px; border: 1px solid #555;" />
       </div>
 
       <p>
